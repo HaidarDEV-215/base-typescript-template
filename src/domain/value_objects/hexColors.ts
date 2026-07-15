@@ -1,7 +1,16 @@
 //   ============================ hex color value object =============================
-
+// we use value object when the entities attrbites have conditions 
+// like hex code for the Color entity
+// in clean arcitecture and DDD we cant write value condition directly in the entity
+// so we use value object to code conditions for the entity attributes
+// you need to create a file for each attributes condition to an entity
+// down there we write this class for the hex code attrbute in Color object to be immutable
+// that means if you want to change a hex code to an color
+// you cant mange hex code value directly, you should create an update method in the entity
+// and these method shouldn't change the value of hex code, it creates a new hex code object,
+// (which is the value object here) and replace old value object with new one
 export class hexColor{
-    private readonly value:string;//more seafty
+    private readonly value:string;//more seafty (immutable value)
     private constructor (hexCode:string){
         this.value = hexCode;
     }
