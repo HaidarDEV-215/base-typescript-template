@@ -1,13 +1,30 @@
 import { Product } from "./domain/aggregates/product";
 import { Category } from "./domain/entities/category";
 import { Color } from "./domain/entities/color";
+import { DomainEventDispatcher } from "./domain/events/base/domainEventDispature";
+import { CategoryCreatedEvent } from "./domain/events/categoryEvent";
 
-const category = Category.create({name:"electronics",createdAt:new Date(),updatedAt: new Date()});
+/*
+DomainEventDispatcher.register("categoryCreated",(event)=>{
+    const e = event as CategoryCreatedEvent;
+    console.log (e.CategoryId);
+    console.log(e.CategoryName);
+})
+*/
+DomainEventDispatcher.register("categoryCreated",(event:CategoryCreatedEvent)=>{
+    console.log (event.CategoryId);
+    console.log(event.CategoryName);
+    console.log(event.toJSON());
+    
+})
+
+const category = Category.create({id:22,name:"electronics",createdAt:new Date(),updatedAt: new Date()});
 // console.log(category.getName());
 // console.log(category.getCeratedAt());
 // console.log(category.getUpdatedAt());
 
 
+category.updateName("laptop");
 const color = Color.create({
     id:1,
     name:"red",

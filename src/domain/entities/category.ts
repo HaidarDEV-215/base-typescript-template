@@ -1,6 +1,9 @@
 // ======  Category Entity = Domain modele
 // 1. interface
 
+import { DomainEventDispatcher } from "../events/base/domainEventDispature";
+import { CategoryCreatedEvent, CategoryNameChanged } from "../events/categoryEvent";
+
 export interface CategoryData{
     id? :number | undefined; // it's optional because it generates automaticly by database
     name : string;
@@ -11,6 +14,9 @@ export interface CategoryData{
 export class Category{
     private constructor (private data:CategoryData){
         this.validate();
+        if(this.data.id){
+            DomainEventDispatcher.dispatch(new CategoryCreatedEvent(this.data.id,this.data.name));
+        }
     }
     private validate():void{
         this.validateName(this.data.name);
@@ -66,8 +72,12 @@ export class Category{
     */
     //6. buisness logic
     public updateName(newName : string):void{
+        const oldName = this.data.name;
         this.validateName(newName);
         this.data.name = newName.trim();
+        if(this.data.id){
+            DomainEventDispatcher.dispatch(new CategoryNameChanged(this.data.id,oldName,newName))
+        }
     }
     public isNew():boolean{
         return this.data.id === undefined;
