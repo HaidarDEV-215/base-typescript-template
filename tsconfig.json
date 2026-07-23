@@ -6,14 +6,19 @@
     "outDir": "./dist",
 
     // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
+    "ignoreDeprecations": "6.0",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es2022",
+//Es modules compatibility
+    "allowSyntheticDefaultImports":true, 
+    "esModuleInterop": true,
+    //"verbatimModuleSyntax":true,
     // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
+    "types":["node"],
+    "lib": ["es2022"],
     // and npm install -D @types/node
+
 
     // Other Outputs
     "sourceMap": false,

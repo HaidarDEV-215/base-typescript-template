@@ -1,18 +1,22 @@
 export abstract class DomainEvent{
-    public readonly accurredOn:Date;
+    public readonly occurredOn:Date;
     constructor(public readonly eventName:string){
-        this.accurredOn = new Date();
+        this.occurredOn = new Date();
     }
+
     protected abstract getEventData():Record<string,any>;// why Record ?
+    // because event data should be ab object record <key is string : value is any type>
     
-    public toJSON():object{
+    public toJSON():object{//why object?
+        //what is differance bitween object return type and Record.
         return{
             eventName:this.eventName,
-            accurredOn:this.accurredOn,
+            accurredOn:this.occurredOn,
             data:this.getEventData() // to be scalable(geniric body type{data}).
         }
     }
 }
+//getEventData 
 //                    {string , any}
 //userCreatedEvent -> {uderId,email}
 //OrderPlacedEvent -> {orderId. total}
