@@ -1,0 +1,65 @@
+//   ============================ hex color value object =============================
+// we use value object when the entities attrbites have conditions 
+// like hex code for the Color entity
+// in clean arcitecture and DDD we cant write value condition directly in the entity
+// so we use value object to code conditions for the entity attributes
+// you need to create a file for each attributes condition to an entity
+// down there we write this class for the hex code attrbute in Color object to be immutable
+// that means if you want to change a hex code to an color
+// you cant mange hex code value directly, you should create an update method in the entity
+// and these method shouldn't change the value of hex code, it creates a new hex code object,
+// (which is the value object here) and replace old value object with new one
+export class hexColor {
+    value; //more seafty (immutable value)
+    constructor(hexCode) {
+        this.value = hexCode;
+    }
+    //factory method 
+    static create(hexCode) {
+        if (!hexCode || hexCode.trim().length === 0) {
+            throw new Error("hex color cannot be empty");
+        }
+        const trimmed = hexCode.trim();
+        const hexRegular_x3 = /^#[0-9A-F]{3}$/i; // regular exprition template  
+        // start with #, values [0,9] or [A,F] for each character, {length} $/:end  i: ignore case
+        const hexRegular_x6 = /^#[0-9A-F]{6}$/i;
+        let normalizationHex;
+        if (hexRegular_x3.test(trimmed)) { // is (trimmed) pass the test? check correctness by template
+            const R = trimmed[1];
+            const G = trimmed[2];
+            const B = trimmed[3];
+            normalizationHex = `#${R}${R}${G}${G}${B}${B}`.toUpperCase();
+        }
+        else if (hexRegular_x6.test(trimmed)) {
+            normalizationHex = trimmed.toUpperCase();
+        }
+        else {
+            throw new Error("invalid hex color format. Must be #RGB or #RRGGBB");
+        }
+        return new hexColor(normalizationHex);
+    }
+    //getters
+    get Value() {
+        return this.value;
+    }
+    getRed() {
+        return parseInt(this.value.substring(1, 3), 16);
+    }
+    getGreen() {
+        return parseInt(this.value.substring(3, 5), 16);
+    }
+    getBlue() {
+        return parseInt(this.value.substring(5, 7), 16);
+    }
+    // #FF0000
+    // rgb(255,0,0)
+    toRGB() {
+        return `rgb(${this.getRed()},${this.getGreen()},${this.getBlue()})`;
+    }
+    equals(other) {
+        return this.value === other.value;
+    }
+    toString() {
+        return this.value;
+    }
+}

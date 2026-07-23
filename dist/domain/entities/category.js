@@ -1,0 +1,86 @@
+// ======  Category Entity = Domain modele
+// 1. interface
+import { DomainEventDispatcher } from "../events/base/domainEventDispature.js";
+import { CategoryCreatedEvent, CategoryNameChanged } from "../events/categoryEvent.js";
+export class Category {
+    data;
+    constructor(data) {
+        this.data = data;
+        this.validate();
+        if (this.data.id) {
+            DomainEventDispatcher.dispatch(new CategoryCreatedEvent(this.data.id, this.data.name));
+        }
+    }
+    validate() {
+        this.validateName(this.data.name);
+    }
+    //validation
+    validateName(name) {
+        if (!this.data.name || this.data.name.trim().length === 0) {
+            throw new Error("Category name is required");
+        }
+        if (this.data.name.trim().length < 2) {
+            throw new Error("Category name must be at least two character");
+        }
+        if (this.data.name.trim().length > 100) {
+            throw new Error("Category name connot exceed 100 character");
+        }
+        this.data.name = name;
+    }
+    //4. factory method
+    static create(data) {
+        return new Category(data);
+    }
+    //5. getters
+    getID() {
+        return this.data.id;
+    }
+    getName() {
+        return this.data.name;
+    }
+    getCeratedAt() {
+        return this.data.createdAt;
+    }
+    getUpdatedAt() {
+        return this.data.updatedAt;
+    }
+    // modern way to write getters in typescript
+    // to invoke in main type ( console.log (mycategory.id); ,,,,, console.log(mycategory.name);)
+    /*
+    public get id():number|undefined{
+        return this.data.id;
+    }
+    public get name():string{
+        return this.data.name;
+    }
+    public get ceratedAt():Date|undefined{
+        return this.data.createdAt;
+    }
+    public get updatedAt():Date|undefined{
+        return this.data.updatedAt;
+    }
+    */
+    //6. buisness logic
+    updateName(newName) {
+        const oldName = this.data.name;
+        this.validateName(newName);
+        this.data.name = newName.trim();
+        if (this.data.id) {
+            DomainEventDispatcher.dispatch(new CategoryNameChanged(this.data.id, oldName, newName));
+        }
+    }
+    isNew() {
+        return this.data.id === undefined;
+    }
+    // public toJSON():CategoryData{
+    //     return {
+    //         id:this.data.id,
+    //         name:this.data.name,
+    //         createdAt:this.data.createdAt,
+    //         updatedAt:this.data.updatedAt
+    //     }
+    // }
+    toJSON() {
+        return { ...this.data };
+    }
+}
