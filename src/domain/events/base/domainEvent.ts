@@ -1,5 +1,5 @@
 export abstract class DomainEvent{
-    public readonly occurredOn:Date;
+    public readonly occurredOn:Date; // more seafty
     constructor(public readonly eventName:string){
         this.occurredOn = new Date();
     }

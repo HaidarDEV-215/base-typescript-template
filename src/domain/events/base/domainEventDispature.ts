@@ -15,10 +15,11 @@ export class DomainEventDispatcher{
     public static dispatch (event:DomainEvent):void{
         console.log(`🚀Event fired : ${event.eventName}`);
         const handlersStack = this.handlers.get(event.eventName);
-        //to bring handlers from Map using 
-        //((_MapName.get(_KeyName'string')))
-        //and store them into handlerStack variable.
+        // to bring handlers array from Map using 
+        // ((_MapName.get(_KeyName'string')))
+        // and store them into handlerStack variable.
         if(handlersStack){
+                        //for each function (handler) revoke this handler
             handlersStack.forEach(handler => handler(event));
         }
     }

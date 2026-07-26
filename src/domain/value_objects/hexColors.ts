@@ -43,7 +43,7 @@ export class hexColor{
         return this.value;
     }
     public getRed():number{
-        return parseInt(this.value.substring(1,3),16);
+        return parseInt(this.value.substring(1,3),16);//parseint(value, conting system (hex ,dec, oct ,bin...))
     }
     public getGreen():number{
         return parseInt(this.value.substring(3,5),16);
